@@ -5,7 +5,7 @@ from tile import Tile
 
 class Grid:
 
-    def __init__(self, width : int, height : int, initial_options : list[Tile]):
+    def __init__(self, width : int, height : int, initial_options : set[Tile]):
         self.board = [[Cell(initial_options) for _ in range(height)] for _ in range(width)]
         self.cells : list[Cell] = []
         self._add_neighbours()

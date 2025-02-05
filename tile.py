@@ -35,7 +35,7 @@ class Tile:
     def get_tiles(self, direction: Direction):
         return self.directions[direction]
     
-    def has_any(self, direction: Direction, tiles : list["Tile"]):
+    def has_any(self, direction: Direction, tiles : set["Tile"]):
         return any(tile in self.directions[direction] for tile in tiles)
     
     def get_color(self) -> tuple[int]:

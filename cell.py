@@ -6,7 +6,7 @@ from tile import Tile
 
 class Cell:
 
-    def __init__(self, initial_options : list[Tile]):
+    def __init__(self, initial_options : set[Tile]):
         self.options = initial_options.copy()
         self.collapsed = False
         self.entropy_change_callback = []
@@ -35,7 +35,7 @@ class Cell:
             self._entropy_changed()
     
     @property
-    def get_options(self) -> list[Tile]:
+    def get_options(self) -> set[Tile]:
         return self.options
 
     def collapse(self) -> None:
@@ -43,12 +43,12 @@ class Cell:
             return
         if len(self.options) <= 0:
             raise RuntimeError("Cell has no options")
-        option = random.sample(self.options, 1)[0]
+        option = random.sample(list(self.options), 1)[0]
         if len(self.options) > 1:
-            self.options = [option]
+            self.options = {option}
             self._entropy_changed()
         else:
-            self.options = [option]
+            self.options = {option}
         self.collapsed = True
 
     def _entropy_changed(self) -> None:

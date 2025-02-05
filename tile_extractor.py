@@ -6,13 +6,13 @@ from tile import Direction, Tile
 class TileExtractor:
 
     @staticmethod
-    def extract(img_path : str) -> list[Tile]:
+    def extract(img_path : str) -> set[Tile]:
         tiles = TileExtractor._create_base_tiles(img_path)
         tiles = TileExtractor._extract_neighbours(tiles)
         return tiles
 
     @staticmethod 
-    def _create_base_tiles(img_path : str) -> list[Tile]:
+    def _create_base_tiles(img_path : str) -> set[Tile]:
         tile_set = set()
         with Image.open(img_path) as img:
             img = img.convert('RGB')
@@ -28,10 +28,10 @@ class TileExtractor:
                             #if xj >= 0 and xj < width and yi >= 0 and yi < height:
                             tile_pixels[i][j] = img.getpixel((xj, yi))
                     tile_set.add(Tile(tile_pixels))
-        return list(tile_set)
+        return tile_set
     
     @staticmethod 
-    def _extract_neighbours(tiles : list[Tile]) -> list[Tile]:
+    def _extract_neighbours(tiles : set[Tile]) -> set[Tile]:
         for tile in tiles:
             for other_tile in tiles:
                 TileExtractor._create_neighbour(tile, other_tile)
