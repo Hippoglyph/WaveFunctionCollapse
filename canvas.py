@@ -6,34 +6,29 @@ from tile import Direction, Tile
 class Canvas:
 
     def __init__(self) -> None:
-        
-        self.scale_factor = 50
+        self.window = tk.Tk()
+        self.window.title("Wave Form Collapse")
+        self.window_width = 500
+        self.window_height = 500
+        self.canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
+        self.canvas.pack()
         
     def _create_image(self, image: Image) -> None:
-        self.window = tk.Tk()
-        self.window.title("Image on Canvas")
-        """
-        Create a Tkinter image from a PIL image and display it on a canvas.
-        """
-        # Calculate the new dimensions based on the scale factor
-        new_width = int(image.width * self.scale_factor)
-        new_height = int(image.height * self.scale_factor)
-        
+        self.canvas.delete("all")
         # Resize the image
-        resized_image = image.resize((new_width, new_height), Image.Resampling.NEAREST)
+        resized_image = image.resize((self.window_width, self.window_height), Image.Resampling.NEAREST)
         
         # Convert the resized image to a format that Tkinter can use
         tk_image = ImageTk.PhotoImage(resized_image)
 
+
         # Create a canvas and draw the resized image on it
-        canvas = tk.Canvas(self.window, width=new_width, height=new_height)
-        canvas.pack()
-        canvas.create_image(0, 0, anchor="nw", image=tk_image)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
         
         # Keep a reference to prevent garbage collection
-        canvas.image = tk_image
-        self.window.after(2000, self.window.destroy) # WTF
-        self.window.mainloop()
+        self.canvas.image = tk_image
+        self.window.update_idletasks()
+
 
 
     def render_image(self, img_path : str) -> None:
@@ -155,6 +150,6 @@ class Canvas:
         pixels = combined_image.load()
         for i in range(len(grid)):
             for j in range(len(grid[i])):
-                pixels[i,j] = grid[i][j]
+                pixels[j,i] = grid[i][j]
         self._create_image(combined_image)
 

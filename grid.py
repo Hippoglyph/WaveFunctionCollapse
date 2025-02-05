@@ -1,3 +1,4 @@
+import random
 from cell import Cell
 from direction_enum import Direction
 from tile import Tile
@@ -28,3 +29,17 @@ class Grid:
                     source_cell.add_neighbour(self.board[i][j - 1], Direction.WEST)
                 if i - 1 >= 0:
                     source_cell.add_neighbour(self.board[i - 1][j], Direction.NORTH)
+
+    def collapse_random(self) -> bool:
+        not_collapsed = []
+        for i in range(len(self.board)):
+            for j in range(len(self.board[i])):
+                source_cell = self.board[i][j]
+                if not source_cell.collapsed:
+                    not_collapsed.append(source_cell)
+        if len(not_collapsed) <= 0:
+            return True
+        cell = random.sample(not_collapsed, 1)[0]
+        cell.collapse()
+        return len(not_collapsed) <= 1
+
