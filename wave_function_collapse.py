@@ -34,6 +34,8 @@ class WaveFunctionCollapse:
         print(f"Init time: {time.time() - init_start_time} seconds")
 
     def _entropy_updated(self, cell : Cell) -> None:
+        if cell in self.unaccounted: # NO right?
+            return
         self.unaccounted.add(cell)
         self.entropy_queue.append(cell)
 

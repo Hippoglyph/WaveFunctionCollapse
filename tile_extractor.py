@@ -23,10 +23,10 @@ class TileExtractor:
 
                     for i in range(0, Tile.SIZE):
                         for j in range(0, Tile.SIZE):
-                            yi = y - Tile.SIZE // 2 + i
-                            xj = x - Tile.SIZE // 2 + j
-                            if xj >= 0 and xj < width and yi >= 0 and yi < height:
-                                tile_pixels[i][j] = img.getpixel((xj, yi))
+                            yi = (y - Tile.SIZE // 2 + i) % height
+                            xj = (x - Tile.SIZE // 2 + j) % width
+                            #if xj >= 0 and xj < width and yi >= 0 and yi < height:
+                            tile_pixels[i][j] = img.getpixel((xj, yi))
                     tile_set.add(Tile(tile_pixels))
         return list(tile_set)
     
