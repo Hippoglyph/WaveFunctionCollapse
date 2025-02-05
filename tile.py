@@ -8,9 +8,12 @@ class Tile:
     def __init__(self, pixels : list[list[tuple[int]]]):
         self.pixels = pixels
         self.directions = {direction: set() for direction in Direction}
+        self._hash = None
 
     def __hash__(self):
-        return hash(tuple(tuple(tuple(row) for row in cube) for cube in self.pixels))
+        if self._hash is None:
+            self._hash = hash(tuple(tuple(tuple(row) for row in cube) for cube in self.pixels))
+        return self._hash
     
     def __eq__(self, other):
         return isinstance(other, Tile) and self.pixels == other.pixels
