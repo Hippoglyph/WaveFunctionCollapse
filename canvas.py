@@ -1,16 +1,17 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 
-from tile import Tile
+from tile import Direction, Tile
 
 class Canvas:
 
     def __init__(self) -> None:
-        self.window = tk.Tk()
-        self.window.title("Image on Canvas")
-        self.scale_factor = 10
+        
+        self.scale_factor = 50
         
     def _create_image(self, image: Image) -> None:
+        self.window = tk.Tk()
+        self.window.title("Image on Canvas")
         """
         Create a Tkinter image from a PIL image and display it on a canvas.
         """
@@ -31,6 +32,7 @@ class Canvas:
         
         # Keep a reference to prevent garbage collection
         canvas.image = tk_image
+        self.window.after(2000, self.window.destroy) # WTF
         self.window.mainloop()
 
 
@@ -74,22 +76,22 @@ class Canvas:
 
         source_image = self._create_tile_image(tile)
         east_images = []
-        for neighbour in tile.east:
+        for neighbour in tile.get_tiles(Direction.EAST):
             image = self._create_tile_image(neighbour)
             east_images.append(image)
 
         south_images = []
-        for neighbour in tile.south:
+        for neighbour in tile.get_tiles(Direction.SOUTH):
             image = self._create_tile_image(neighbour)
             south_images.append(image)
 
         west_images = []
-        for neighbour in tile.west:
+        for neighbour in tile.get_tiles(Direction.WEST):
             image = self._create_tile_image(neighbour)
             west_images.append(image)
 
         north_images = []
-        for neighbour in tile.north:
+        for neighbour in tile.get_tiles(Direction.NORTH):
             image = self._create_tile_image(neighbour)
             north_images.append(image)
 
@@ -147,3 +149,12 @@ class Canvas:
                     g = 50
                 pixels[x + 1 * padding_scaler, row + 1 * padding_scaler] = (r,b,g)
         return image
+    
+    def render_color_grid(self, grid = list[list[tuple[int]]]) -> None:
+        combined_image = Image.new('RGB', (len(grid), len(grid[0])))
+        pixels = combined_image.load()
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                pixels[i,j] = grid[i][j]
+        self._create_image(combined_image)
+
