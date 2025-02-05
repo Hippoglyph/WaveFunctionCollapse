@@ -38,7 +38,7 @@ class Tile:
         if tiles_key in self._has_any_cache[direction]:
             return self._has_any_cache[direction][tiles_key]
         
-        result = any(tile in self.directions[direction] for tile in tiles)
+        result = bool(tiles & self.directions[direction])
         self._has_any_cache[direction][tiles_key] = result
         return result
     
