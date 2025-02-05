@@ -17,14 +17,14 @@ class TileExtractor:
         with Image.open(img_path) as img:
             img = img.convert('RGB')
             width, height = img.size
-            for x in range(width):
-                for y in range(height):
+            for x in range(width): #Right?
+                for y in range(height): #Right?
                     tile_pixels = [[(-1,-1,-1) for _ in range(Tile.SIZE)] for _ in range(Tile.SIZE)]
 
                     for i in range(0, Tile.SIZE):
                         for j in range(0, Tile.SIZE):
-                            yi = (y - Tile.SIZE // 2 + i) % height
-                            xj = (x - Tile.SIZE // 2 + j) % width
+                            yi = (y - Tile.SIZE // 2 + i) % height # Wrong
+                            xj = (x - Tile.SIZE // 2 + j) % width # Wrong
                             #if xj >= 0 and xj < width and yi >= 0 and yi < height:
                             tile_pixels[i][j] = img.getpixel((xj, yi))
                     tile_set.add(Tile(tile_pixels))

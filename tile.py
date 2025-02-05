@@ -1,3 +1,4 @@
+from functools import lru_cache
 from direction_enum import Direction
 
 
@@ -9,6 +10,7 @@ class Tile:
         self.pixels = pixels
         self.directions = {direction: set() for direction in Direction}
         self._hash = None
+        self._has_any_cache = {direction: {} for direction in Direction}
 
     def __hash__(self):
         if self._hash is None:
@@ -18,25 +20,27 @@ class Tile:
     def __eq__(self, other):
         return isinstance(other, Tile) and self.pixels == other.pixels
 
-    # Getter for pixels
     @property
-    def get_pixels(self):
+    def get_pixels(self) -> list[list[tuple[int]]]:
         return self.pixels
 
-    # Add tile to a direction
-    def add_tile(self, direction: Direction, tile : "Tile"):
+    def add_tile(self, direction: Direction, tile : "Tile") -> bool:
         self.directions[direction].add(tile)
 
-    # Check if tile is in a direction
-    def contains_tile(self, direction: Direction, tile : "Tile"):
+    def contains_tile(self, direction: Direction, tile : "Tile") -> bool:
         return tile in self.directions[direction]
     
-    # Check if tile is in a direction
-    def get_tiles(self, direction: Direction):
+    def get_tiles(self, direction: Direction) -> set["Tile"]:
         return self.directions[direction]
     
-    def has_any(self, direction: Direction, tiles : set["Tile"]):
-        return any(tile in self.directions[direction] for tile in tiles)
+    def has_any(self, direction: Direction, tiles : set["Tile"]) -> bool:
+        tiles_key = frozenset(tiles)
+        if tiles_key in self._has_any_cache[direction]:
+            return self._has_any_cache[direction][tiles_key]
+        
+        result = any(tile in self.directions[direction] for tile in tiles)
+        self._has_any_cache[direction][tiles_key] = result
+        return result
     
     def get_color(self) -> tuple[int]:
         return self.pixels[Tile.SIZE // 2][Tile.SIZE // 2]
