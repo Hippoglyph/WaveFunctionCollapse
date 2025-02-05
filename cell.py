@@ -15,7 +15,9 @@ class Cell:
 
     def add_neighbour(self, neighbour : "Cell", dir : Direction) -> None:
         self.neighbours[neighbour] = dir
-        neighbour.subscribe_entropy_change(self.reduce)
+
+    def get_neighbours(self) -> list["Cell"]:
+        return list(self.neighbours.keys())
 
     def reduce(self, other_cell : "Cell") -> None:
         dir = self.neighbours[other_cell]
@@ -76,4 +78,7 @@ class Cell:
         g //= len(self.options)
         self.color = (r, b, g)
         return self.color
+    
+    def get_entropy(self) -> int:
+        return len(self.options)
 

@@ -1,4 +1,3 @@
-import random
 from cell import Cell
 from direction_enum import Direction
 from tile import Tile
@@ -8,6 +7,7 @@ class Grid:
 
     def __init__(self, width : int, height : int, initial_options : list[Tile]):
         self.board = [[Cell(initial_options) for _ in range(height)] for _ in range(width)]
+        self.cells : list[Cell] = []
         self._add_neighbours()
 
     def get_color_grid(self) -> list[list[tuple[int]]]:
@@ -21,6 +21,7 @@ class Grid:
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
                 source_cell = self.board[i][j]
+                self.cells.append(source_cell)
                 if j + 1 < len(self.board[i]):
                     source_cell.add_neighbour(self.board[i][j + 1], Direction.EAST)
                 if i + 1 < len(self.board):
@@ -30,16 +31,6 @@ class Grid:
                 if i - 1 >= 0:
                     source_cell.add_neighbour(self.board[i - 1][j], Direction.NORTH)
 
-    def collapse_random(self) -> bool:
-        not_collapsed = []
-        for i in range(len(self.board)):
-            for j in range(len(self.board[i])):
-                source_cell = self.board[i][j]
-                if not source_cell.collapsed:
-                    not_collapsed.append(source_cell)
-        if len(not_collapsed) <= 0:
-            return True
-        cell = random.sample(not_collapsed, 1)[0]
-        cell.collapse()
-        return len(not_collapsed) <= 1
-
+    @property
+    def get_cells(self) -> list[Cell]:
+        return self.cells
