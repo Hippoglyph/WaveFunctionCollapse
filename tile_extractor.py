@@ -18,7 +18,9 @@ class TileExtractor:
             img = img.convert('RGB')
             width, height = img.size
             for x in range(width): #Right?
+            #for x in range(Tile.SIZE // 2, width - Tile.SIZE // 2): #Right?
                 for y in range(height): #Right?
+                #for y in range(Tile.SIZE // 2, height - Tile.SIZE // 2): #Right?
                     tile_pixels = [[(-1,-1,-1) for _ in range(Tile.SIZE)] for _ in range(Tile.SIZE)]
 
                     for i in range(0, Tile.SIZE):
